@@ -133,8 +133,8 @@ public class IntegrationSceneUI : MonoBehaviour
                 GameManager.Instance.difficulty
             );
 
-            highScoreText.text = $"最高スコア：{highScore}";
-            highScoreText.fontSize = 32;
+            highScoreText.text = $"Best Score：{highScore}";
+            highScoreText.fontSize = 30;
         }
 
         //[if (timeText != null)
@@ -195,9 +195,9 @@ public class IntegrationSceneUI : MonoBehaviour
 
         UpdateScoreText(GameManager.Instance.score);
 
-        UpdateJudgementCount(perfectCountText, "P", "FFFF00", GameManager.Instance.perfectCount);
-        UpdateJudgementCount(goodCountText, "G", "87CEFA", GameManager.Instance.goodCount);
-        UpdateJudgementCount(missCountText, "M", "C0C0C0", GameManager.Instance.missCount);
+        UpdateJudgementCount(perfectCountText, "Perfect", "FFFF00", GameManager.Instance.perfectCount);
+        UpdateJudgementCount(goodCountText, "Good", "87CEFA", GameManager.Instance.goodCount);
+        UpdateJudgementCount(missCountText, "Miss", "C0C0C0", GameManager.Instance.missCount);
     }
 
     private void ConfigureScoreText()
