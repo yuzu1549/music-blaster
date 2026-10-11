@@ -98,13 +98,15 @@ public class AudioManager : MonoBehaviour
     /// SE を再生する。
     /// </summary>
     /// <param name="clip">再生する SE</param>
-    /// <param name="volumeScale">SE ごとの音量倍率</param>
+    /// <param name="volumeScale">
+    /// SE ごとの音量倍率。1を超える値で増幅できるが、音割れに注意する。
+    /// </param>
     public void PlaySE(AudioClip clip, float volumeScale = 1.0f)
     {
         if (clip == null) return;
         if (seSource == null) return;
 
-        float safeVolumeScale = Mathf.Clamp01(volumeScale);
+        float safeVolumeScale = Mathf.Max(0f, volumeScale);
         seSource.PlayOneShot(clip, safeVolumeScale);
     }
 
