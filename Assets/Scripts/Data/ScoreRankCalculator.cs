@@ -45,8 +45,10 @@ public class ScoreRankCalculator
     /// </summary>
     /// <param name="score"></param>
     /// <param name="maxScore"></param>
+    /// <param name="settings">共通設定。未指定の場合は初期ボーダーを使用する。</param>
     /// <returns></returns>
-    public string Calculate(int score, int maxScore)
+    public string Calculate(
+        int score, int maxScore, ScoreRankSettings settings = null)
     {
         if (maxScore <= 0)
         {
@@ -55,22 +57,31 @@ public class ScoreRankCalculator
 
         float scoreRate = (float)score / maxScore;
 
-        if (scoreRate >= 0.9f)
+        float sRate = (settings != null
+            ? settings.SPercent : ScoreRankSettings.DefaultSPercent) / 100f;
+        float aRate = (settings != null
+            ? settings.APercent : ScoreRankSettings.DefaultAPercent) / 100f;
+        float bRate = (settings != null
+            ? settings.BPercent : ScoreRankSettings.DefaultBPercent) / 100f;
+        float cRate = (settings != null
+            ? settings.CPercent : ScoreRankSettings.DefaultCPercent) / 100f;
+
+        if (scoreRate >= sRate)
         {
             return "S";
         }
 
-        if (scoreRate >= 0.8f)
+        if (scoreRate >= aRate)
         {
             return "A";
         }
 
-        if (scoreRate >= 0.7f)
+        if (scoreRate >= bRate)
         {
             return "B";
         }
 
-        if (scoreRate >= 0.6f)
+        if (scoreRate >= cRate)
         {
             return "C";
         }

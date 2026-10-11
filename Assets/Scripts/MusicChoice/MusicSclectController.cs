@@ -39,6 +39,10 @@ public class MusicSelectController : MonoBehaviour
     [Header("スコア計算用")]
     [SerializeField] private SongDatabaseSO songDatabase;
 
+    [Header("共通のランク達成率設定")]
+    [Tooltip("リザルト画面と同じScoreRankSettingsを割り当ててください")]
+    [SerializeField] private ScoreRankSettings rankSettings;
+
     [Header("決定ボタン")]
     [SerializeField] private Button confirmButton;
 
@@ -481,7 +485,8 @@ public class MusicSelectController : MonoBehaviour
             rank =
                 new ScoreRankCalculator().Calculate(
                     highScore,
-                    maxScore
+                    maxScore,
+                    rankSettings
                 );
         }
 
