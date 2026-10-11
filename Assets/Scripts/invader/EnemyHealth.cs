@@ -13,6 +13,7 @@ public class EnemyHealth : MonoBehaviour, IPoolable, IDamageable
     private EnemyMove enemyMove; // EnemyMoveの参照
     private EnemyAttack enemyAttack; // EnemyAttackの参照
     private EnemyGroupController enemyGroup; // 所属する敵グループ
+    private Vector3 initialLocalScale;
     
     [Header("死亡音")]
     [SerializeField] private AudioClip deathSE; // 死亡音
@@ -21,6 +22,7 @@ public class EnemyHealth : MonoBehaviour, IPoolable, IDamageable
 
     private void Awake()
     {
+        initialLocalScale = transform.localScale;
         currentHealth = maxHealth; // 初期化
         anim = GetComponent<Animator>(); // アニメーターの取得
         enemyMove = GetComponent<EnemyMove>(); // EnemyMoveの取得
@@ -182,6 +184,8 @@ public class EnemyHealth : MonoBehaviour, IPoolable, IDamageable
             anim.Update(0f);
         }
 
+        // 前回の伸縮を新しいグループの基準サイズに引き継がない。
+        transform.localScale = initialLocalScale;
         enemyMove.enabled = true; // 敵の移動を再開
         rb.linearVelocity = Vector2.zero; // Rigidbodyの速度をリセット
         Collider2D collider = GetComponent<Collider2D>();
@@ -208,6 +212,7 @@ public class EnemyHealth : MonoBehaviour, IPoolable, IDamageable
             transform.position = ownerPool.container.position;
         }
 
+        transform.localScale = initialLocalScale;
         previousGroup?.UnregisterEnemy(this);
         transform.rotation = Quaternion.identity; // 回転をリセット
     }
