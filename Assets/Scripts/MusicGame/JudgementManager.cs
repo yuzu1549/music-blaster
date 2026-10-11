@@ -24,6 +24,18 @@ public class JudgementManager : MonoBehaviour
 	[Header("UI設定")]
 	public TextMeshProUGUI judgementText;
 
+	[Header("PERFECT の判定文字色")]
+	[SerializeField] private Color perfectTextColor =
+		new Color32(255, 224, 102, 255);
+
+	[Header("GOOD の判定文字色")]
+	[SerializeField] private Color goodTextColor =
+		new Color32(102, 217, 255, 255);
+
+	[Header("MISS の判定文字色")]
+	[SerializeField] private Color missTextColor =
+		new Color32(255, 112, 112, 255);
+
 	public event Action<string> OnJudgement; // 判定結果を外部に通知するイベント
 
 	public int PerfectCount { get; private set; }
@@ -103,7 +115,7 @@ public class JudgementManager : MonoBehaviour
 			if (minTimeDiff <= perfectWindow)
 			{
 				PerfectCount++;
-				ShowJudgement("PERFECT!!", Color.yellow);
+				ShowJudgement("PERFECT!!", perfectTextColor);
 				OnJudgement?.Invoke("PERFECT");
 
 				// ★追加：PerfectのSEを鳴らす（ミキサーのSEグループを通る）
@@ -116,7 +128,7 @@ public class JudgementManager : MonoBehaviour
 			else if (minTimeDiff <= goodWindow)
 			{
 				GoodCount++;
-				ShowJudgement("GOOD!", Color.green);
+				ShowJudgement("GOOD!", goodTextColor);
 				OnJudgement?.Invoke("GOOD");
 
 				// ★追加：GoodのSEを鳴らす
@@ -129,7 +141,7 @@ public class JudgementManager : MonoBehaviour
 			else if (minTimeDiff <= missWindow)
 			{
 				MissCount++;
-				ShowJudgement("MISS", Color.gray);
+				ShowJudgement("MISS", missTextColor);
 				OnJudgement?.Invoke("MISS");
 
 				// ★追加：MISSの時も空打ち用の音を鳴らす！
@@ -157,7 +169,7 @@ public class JudgementManager : MonoBehaviour
 	public void DisplayMiss()
 	{
 		MissCount++;
-		ShowJudgement("MISS", Color.gray);
+		ShowJudgement("MISS", missTextColor);
 		OnJudgement?.Invoke("MISS");
 	}
 
