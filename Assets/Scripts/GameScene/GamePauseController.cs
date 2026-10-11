@@ -418,4 +418,17 @@ public class GamePauseController : MonoBehaviour
             && (GameManager.Instance.isGameOver
                 || GameManager.Instance.isGameCleared);
     }
+
+    public void CloseOptionsAndResume()
+    {
+        Debug.Log("設定画面を閉じて再開します");
+
+        CloseOptions();
+
+        Debug.Log("CloseOptions実行後: " + currentState);
+
+        StartResumeCountdown();
+
+        Debug.Log("StartResumeCountdown実行後: " + currentState);
+    }
 }

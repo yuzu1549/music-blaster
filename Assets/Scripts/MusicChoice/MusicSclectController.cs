@@ -1,15 +1,14 @@
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using MusicInvaders.Data;
-
 
 public class MusicSelectController : MonoBehaviour
 {
     [Header("曲選択UI")]
     [Tooltip("上・中央・下の順番で3つ登録してください")]
     [SerializeField] private SongItem[] songItems;
-
     [SerializeField] private SongInfoPanel songInfoPanel;
 
     [Header("曲プレビュー")]
@@ -29,6 +28,14 @@ public class MusicSelectController : MonoBehaviour
     [SerializeField] private TMP_Text rankText;
     [SerializeField] private TMP_Text bestScoreText;
 
+    [Header("ランク画像")]
+    [SerializeField] private Image rankImage;
+    [SerializeField] private Sprite rankS;
+    [SerializeField] private Sprite rankA;
+    [SerializeField] private Sprite rankB;
+    [SerializeField] private Sprite rankC;
+    [SerializeField] private Sprite rankD;
+
     [Header("スコア計算用")]
     [SerializeField] private SongDatabaseSO songDatabase;
 
@@ -39,14 +46,12 @@ public class MusicSelectController : MonoBehaviour
     [Tooltip("OptionsPanelではなく、親のOptionsOverlayを登録してください")]
     [SerializeField] private GameObject settingsPanel;
 
-
     private readonly string[] songNames =
     {
         "ShiningStar",
         "MereFancy",
         "SnowDrive0123"
     };
-
 
     private readonly string[] artistNames =
     {
@@ -55,14 +60,12 @@ public class MusicSelectController : MonoBehaviour
         "sさん"
     };
 
-
     private readonly Sprite[] jacketSprites =
     {
         null,
         null,
         null
     };
-
 
     private readonly string[] difficultyNames =
     {
@@ -71,51 +74,31 @@ public class MusicSelectController : MonoBehaviour
         "Hard"
     };
 
-
     // 各曲の難易度
-    // 列の順番：
-    // Easy, Normal, Hard
+    // 列：Easy, Normal, Hard
     private readonly int[,] difficultyStars =
     {
-        { 1, 3, 4 }, // ShiningStar
-        { 2, 3, 5 }, // MereFancy
-        { 1, 3, 5 }  // title3
+        { 1, 3, 4 },
+        { 2, 3, 5 },
+        { 1, 3, 5 }
     };
-
 
     // 中央に表示されている曲
     private int centerSongIndex = 0;
 
-
-    // 初期難易度
-    // 0 = Easy
-    // 1 = Normal
-    // 2 = Hard
+    // 初期難易度：Normal
     private int selectedDifficultyIndex = 1;
 
+    private string currentSongName = string.Empty;
+    private string currentArtistName = string.Empty;
+    private string currentDifficultyName = string.Empty;
 
-    private string currentSongName =
-        string.Empty;
+    public string CurrentSongName => currentSongName;
+    public string CurrentDifficultyName => currentDifficultyName;
 
-    private string currentArtistName =
-        string.Empty;
-
-    private string currentDifficultyName =
-        string.Empty;
-
-
-    public string CurrentSongName =>
-        currentSongName;
-
-    public string CurrentDifficultyName =>
-        currentDifficultyName;
-
-
-    // SongItemが3つなので中央はElement 1
     private const int centerItemIndex = 1;
 
     private bool isSettingsOpen = false;
-
 
     private void Start()
     {
@@ -128,10 +111,7 @@ public class MusicSelectController : MonoBehaviour
             settingsPanel.SetActive(false);
         }
 
-
-        // 最初からNormal
         selectedDifficultyIndex = 1;
-
 
         UpdateSelectedValues();
         UpdateSongList();
@@ -142,150 +122,101 @@ public class MusicSelectController : MonoBehaviour
         PlaySelectedMusic();
     }
 
-
     /// <summary>
-    /// Buttonイベントを登録
+    /// ボタンイベントを登録
     /// </summary>
     private void RegisterButtonEvents()
     {
         if (upButton != null)
         {
-            upButton.onClick.AddListener(
-                MoveUp
-            );
+            upButton.onClick.AddListener(MoveUp);
         }
         else
         {
-            Debug.LogWarning(
-                "Up Buttonが登録されていません。"
-            );
+            Debug.LogWarning("Up Buttonが登録されていません。");
         }
-
 
         if (downButton != null)
         {
-            downButton.onClick.AddListener(
-                MoveDown
-            );
+            downButton.onClick.AddListener(MoveDown);
         }
         else
         {
-            Debug.LogWarning(
-                "Down Buttonが登録されていません。"
-            );
+            Debug.LogWarning("Down Buttonが登録されていません。");
         }
-
 
         if (easyButton != null)
         {
-            easyButton.onClick.AddListener(
-                SelectEasy
-            );
+            easyButton.onClick.AddListener(SelectEasy);
         }
         else
         {
-            Debug.LogWarning(
-                "Easy Buttonが登録されていません。"
-            );
+            Debug.LogWarning("Easy Buttonが登録されていません。");
         }
-
 
         if (normalButton != null)
         {
-            normalButton.onClick.AddListener(
-                SelectNormal
-            );
+            normalButton.onClick.AddListener(SelectNormal);
         }
         else
         {
-            Debug.LogWarning(
-                "Normal Buttonが登録されていません。"
-            );
+            Debug.LogWarning("Normal Buttonが登録されていません。");
         }
-
 
         if (hardButton != null)
         {
-            hardButton.onClick.AddListener(
-                SelectHard
-            );
+            hardButton.onClick.AddListener(SelectHard);
         }
         else
         {
-            Debug.LogWarning(
-                "Hard Buttonが登録されていません。"
-            );
+            Debug.LogWarning("Hard Buttonが登録されていません。");
         }
-
 
         if (confirmButton != null)
         {
-            confirmButton.onClick.AddListener(
-                StartSelectedGame
-            );
+            confirmButton.onClick.AddListener(StartSelectedGame);
         }
         else
         {
-            Debug.LogWarning(
-                "Confirm Buttonが登録されていません。"
-            );
+            Debug.LogWarning("Confirm Buttonが登録されていません。");
         }
     }
 
-
     /// <summary>
-    /// Buttonイベントを解除
+    /// ボタンイベントを解除
     /// </summary>
     private void OnDestroy()
     {
         if (upButton != null)
         {
-            upButton.onClick.RemoveListener(
-                MoveUp
-            );
+            upButton.onClick.RemoveListener(MoveUp);
         }
-
 
         if (downButton != null)
         {
-            downButton.onClick.RemoveListener(
-                MoveDown
-            );
+            downButton.onClick.RemoveListener(MoveDown);
         }
-
 
         if (easyButton != null)
         {
-            easyButton.onClick.RemoveListener(
-                SelectEasy
-            );
+            easyButton.onClick.RemoveListener(SelectEasy);
         }
-
 
         if (normalButton != null)
         {
-            normalButton.onClick.RemoveListener(
-                SelectNormal
-            );
+            normalButton.onClick.RemoveListener(SelectNormal);
         }
-
 
         if (hardButton != null)
         {
-            hardButton.onClick.RemoveListener(
-                SelectHard
-            );
+            hardButton.onClick.RemoveListener(SelectHard);
         }
-
 
         if (confirmButton != null)
         {
-            confirmButton.onClick.RemoveListener(
-                StartSelectedGame
-            );
+            confirmButton.onClick.RemoveListener(StartSelectedGame);
         }
     }
-
 
     /// <summary>
     /// 上の三角ボタン
@@ -297,26 +228,17 @@ public class MusicSelectController : MonoBehaviour
             return;
         }
 
-
         centerSongIndex--;
-
 
         if (centerSongIndex < 0)
         {
-            centerSongIndex =
-                songNames.Length - 1;
+            centerSongIndex = songNames.Length - 1;
         }
-
 
         UpdateMusicDisplay();
 
-
-        Debug.Log(
-            "上へ移動：" +
-            currentSongName
-        );
+        Debug.Log("上へ移動：" + currentSongName);
     }
-
 
     /// <summary>
     /// 下の三角ボタン
@@ -328,26 +250,17 @@ public class MusicSelectController : MonoBehaviour
             return;
         }
 
-
         centerSongIndex++;
 
-
-        if (centerSongIndex >=
-            songNames.Length)
+        if (centerSongIndex >= songNames.Length)
         {
             centerSongIndex = 0;
         }
 
-
         UpdateMusicDisplay();
 
-
-        Debug.Log(
-            "下へ移動：" +
-            currentSongName
-        );
+        Debug.Log("下へ移動：" + currentSongName);
     }
-
 
     /// <summary>
     /// 曲に関係する表示をまとめて更新
@@ -361,58 +274,45 @@ public class MusicSelectController : MonoBehaviour
         PlaySelectedMusic();
     }
 
-
     public void SelectEasy()
     {
         SelectDifficulty(0);
     }
-
 
     public void SelectNormal()
     {
         SelectDifficulty(1);
     }
 
-
     public void SelectHard()
     {
         SelectDifficulty(2);
     }
 
-
     /// <summary>
     /// 難易度を変更
     /// </summary>
-    private void SelectDifficulty(
-        int difficultyIndex
-    )
+    private void SelectDifficulty(int difficultyIndex)
     {
         if (isSettingsOpen)
         {
             return;
         }
 
-
         if (difficultyIndex < 0 ||
-            difficultyIndex >=
-            difficultyNames.Length)
+            difficultyIndex >= difficultyNames.Length)
         {
             Debug.LogWarning(
                 "存在しない難易度が指定されました。"
             );
-
             return;
         }
 
-
-        selectedDifficultyIndex =
-            difficultyIndex;
-
+        selectedDifficultyIndex = difficultyIndex;
 
         UpdateSelectedValues();
         UpdateDifficultySelection();
         UpdateScoreInfo();
-
 
         Debug.Log(
             "選択：" +
@@ -421,7 +321,6 @@ public class MusicSelectController : MonoBehaviour
             currentDifficultyName
         );
     }
-
 
     /// <summary>
     /// 決定ボタン
@@ -433,9 +332,7 @@ public class MusicSelectController : MonoBehaviour
             return;
         }
 
-
         UpdateSelectedValues();
-
 
         if (GameManager.Instance != null)
         {
@@ -453,7 +350,6 @@ public class MusicSelectController : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// 選択中の曲・作者・難易度を更新
     /// </summary>
@@ -466,11 +362,8 @@ public class MusicSelectController : MonoBehaviour
             artistNames[centerSongIndex];
 
         currentDifficultyName =
-            difficultyNames[
-                selectedDifficultyIndex
-            ];
+            difficultyNames[selectedDifficultyIndex];
     }
-
 
     /// <summary>
     /// 曲一覧を更新
@@ -483,58 +376,38 @@ public class MusicSelectController : MonoBehaviour
             Debug.LogWarning(
                 "Song ItemsのSizeを3にしてください。"
             );
-
             return;
         }
 
-
-        for (
-            int i = 0;
-            i < songItems.Length;
-            i++
-        )
+        for (int i = 0; i < songItems.Length; i++)
         {
             if (songItems[i] == null)
             {
                 continue;
             }
 
-
-            int offset =
-                i - centerItemIndex;
-
-
-            int songIndex =
-                centerSongIndex + offset;
-
+            int offset = i - centerItemIndex;
+            int songIndex = centerSongIndex + offset;
 
             while (songIndex < 0)
             {
-                songIndex +=
-                    songNames.Length;
+                songIndex += songNames.Length;
             }
 
-
-            while (
-                songIndex >= songNames.Length
-            )
+            while (songIndex >= songNames.Length)
             {
-                songIndex -=
-                    songNames.Length;
+                songIndex -= songNames.Length;
             }
-
 
             songItems[i].SetTitle(
                 songNames[songIndex]
             );
-
 
             songItems[i].SetSelected(
                 i == centerItemIndex
             );
         }
     }
-
 
     /// <summary>
     /// 曲情報を更新
@@ -546,31 +419,17 @@ public class MusicSelectController : MonoBehaviour
             return;
         }
 
-
-        // 曲名・ジャケット
         songInfoPanel.SetSongInfo(
             songNames[centerSongIndex],
             jacketSprites[centerSongIndex]
         );
 
-
-        // 星
         songInfoPanel.SetDifficultyStars(
-            difficultyStars[
-                centerSongIndex,
-                0
-            ],
-            difficultyStars[
-                centerSongIndex,
-                1
-            ],
-            difficultyStars[
-                centerSongIndex,
-                2
-            ]
+            difficultyStars[centerSongIndex, 0],
+            difficultyStars[centerSongIndex, 1],
+            difficultyStars[centerSongIndex, 2]
         );
     }
-
 
     /// <summary>
     /// 難易度選択表示
@@ -582,12 +441,10 @@ public class MusicSelectController : MonoBehaviour
             return;
         }
 
-
         songInfoPanel.SetDifficultySelected(
             selectedDifficultyIndex
         );
     }
-
 
     /// <summary>
     /// 選択中の曲・難易度の
@@ -595,12 +452,11 @@ public class MusicSelectController : MonoBehaviour
     /// </summary>
     private void UpdateScoreInfo()
     {
-        if (rankText == null ||
+        if ((rankText == null && rankImage == null) ||
             bestScoreText == null)
         {
             return;
         }
-
 
         // 保存されている最高スコア
         int highScore =
@@ -608,7 +464,6 @@ public class MusicSelectController : MonoBehaviour
                 currentSongName,
                 currentDifficultyName
             );
-
 
         // その譜面の理論最大スコア
         int maxScore =
@@ -618,9 +473,7 @@ public class MusicSelectController : MonoBehaviour
                 currentDifficultyName
             );
 
-
         string rank = "-";
-
 
         // 一度でもスコアが保存されている場合
         if (highScore > 0)
@@ -632,14 +485,68 @@ public class MusicSelectController : MonoBehaviour
                 );
         }
 
+        // 従来の文字表示
+        if (rankText != null)
+        {
+            rankText.text = rank;
+        }
 
-        rankText.text = rank;
+        // 追加：ランク画像を更新
+        UpdateRankImage(rank);
 
+        // ベストスコア表示
         bestScoreText.text =
             highScore.ToString("N0");
     }
 
+    /// <summary>
+    /// ランクに応じて表示画像を切り替える
+    /// </summary>
+    private void UpdateRankImage(string rank)
+    {
+        if (rankImage == null)
+        {
+            return;
+        }
 
+        Sprite selectedSprite = null;
+
+        switch (rank.Trim().ToUpperInvariant())
+        {
+            case "S":
+                selectedSprite = rankS;
+                break;
+
+            case "A":
+                selectedSprite = rankA;
+                break;
+
+            case "B":
+                selectedSprite = rankB;
+                break;
+
+            case "C":
+                selectedSprite = rankC;
+                break;
+
+            case "D":
+                selectedSprite = rankD;
+                break;
+
+            default:
+                selectedSprite = null;
+                break;
+        }
+
+        rankImage.sprite = selectedSprite;
+
+        // 未プレイの場合や画像未登録なら非表示
+        rankImage.enabled = selectedSprite != null;
+    }
+
+    /// <summary>
+    /// 設定画面を開く
+    /// </summary>
     public void OpenSettings()
     {
         if (settingsPanel == null)
@@ -647,24 +554,22 @@ public class MusicSelectController : MonoBehaviour
             return;
         }
 
-
         isSettingsOpen = true;
-
         settingsPanel.SetActive(true);
     }
 
-
+    /// <summary>
+    /// 設定画面を閉じる
+    /// </summary>
     public void CloseSettings()
     {
         isSettingsOpen = false;
-
 
         if (settingsPanel != null)
         {
             settingsPanel.SetActive(false);
         }
     }
-
 
     /// <summary>
     /// 選択曲をプレビュー再生
@@ -676,19 +581,15 @@ public class MusicSelectController : MonoBehaviour
             return;
         }
 
-
         if (songClips == null ||
             centerSongIndex < 0 ||
-            centerSongIndex >=
-            songClips.Length)
+            centerSongIndex >= songClips.Length)
         {
             return;
         }
 
-
         AudioClip selectedClip =
             songClips[centerSongIndex];
-
 
         if (selectedClip == null)
         {
@@ -696,17 +597,10 @@ public class MusicSelectController : MonoBehaviour
             return;
         }
 
-
         previewAudioSource.Stop();
 
-
-        previewAudioSource.clip =
-            selectedClip;
-
-
+        previewAudioSource.clip = selectedClip;
         previewAudioSource.time = 0f;
-
-
         previewAudioSource.Play();
     }
 }
