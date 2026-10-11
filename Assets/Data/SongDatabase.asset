@@ -24,9 +24,9 @@ MonoBehaviour:
     - difficultyName: Easy
       chartFile: {fileID: 4900000, guid: 96fd5e7aa7b7e154d805a79bf3ac5a9b, type: 3}
     - difficultyName: Normal
-      chartFile: {fileID: 4900000, guid: 0ceb34a62d825094eb2128009ff063a5, type: 3}
-    - difficultyName: Hard
       chartFile: {fileID: 4900000, guid: 14fad42dd0223ef4b89bf46e7a412d51, type: 3}
+    - difficultyName: Hard
+      chartFile: {fileID: 4900000, guid: 627491d722b20b14c8c5d82093360eec, type: 3}
   - songName: MereFancy
     bgm: {fileID: 8300000, guid: 58a1838a0a8f8474ebda25ee20c570f4, type: 3}
     bpm: 132
@@ -40,7 +40,7 @@ MonoBehaviour:
     - difficultyName: Normal
       chartFile: {fileID: 4900000, guid: 730d5678cfe8ea6438327e2ce2531eb0, type: 3}
     - difficultyName: Hard
-      chartFile: {fileID: 4900000, guid: 09f2d306a7745634ba242d89b0916e63, type: 3}
+      chartFile: {fileID: 4900000, guid: 501466ff9a1bda7498be3e7cc2eca3da, type: 3}
   - songName: SnowDrive0123
     bgm: {fileID: 8300000, guid: 31d9aa4c096625d428de8b5eabf5f051, type: 3}
     bpm: 224
