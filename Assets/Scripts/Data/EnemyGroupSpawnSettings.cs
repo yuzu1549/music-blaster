@@ -19,6 +19,8 @@ public sealed class EnemyGroupSpawnRule
 
     public int SpawnGroupCount => Mathf.Max(1, spawnGroupCount);
 
+    public bool IsValid => spawnIntervalMeasures >= 1 && spawnGroupCount >= 1;
+
     public EnemyGroupSpawnRule()
     {
     }

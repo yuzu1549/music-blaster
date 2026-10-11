@@ -18,6 +18,8 @@ public class EnemyGroupMovementSettings : MonoBehaviour
     [Header("通常フェーズの小節数")]
     [Min(1)]
     [SerializeField] private int normalPhaseMeasureCount = 14;
+
+    private int spawnRowCount = 1;
     [Header("突入フェーズでチャージする拍数")]
     [Min(1)]
     [SerializeField] private int diveChargeBeatCount = 3;
@@ -51,6 +53,22 @@ public class EnemyGroupMovementSettings : MonoBehaviour
     public Transform NormalStartPoint => normalStartPoint;
     public Transform DiveStartPoint => diveStartPoint;
     public Transform DiveEndPoint => diveEndPoint;
+    public int SpawnRowCount => Mathf.Min(spawnRowCount, normalPhaseMeasureCount);
+    public int EntryPhaseMeasureCount => entryPhaseMeasureCount;
+
+    /// <summary>
+    /// プレイ開始時に曲別の移動時間だけを反映する。
+    /// 基準位置・伸縮・減速演出はシーンの設定を維持する。
+    /// </summary>
+    public void ApplyDifficultySettings(
+        EnemyGlobalSettings global, EnemyDifficultySettings settings)
+    {
+        entryPhaseMeasureCount = global.entryPhaseMeasureCount;
+        spawnRowCount = global.spawnRowCount;
+        normalPhaseMeasureCount = settings.normalPhaseMeasureCount;
+        diveChargeBeatCount = global.diveChargeBeatCount;
+        diveMovementBeatCount = global.diveMovementBeatCount;
+    }
 
     /// <summary>
     /// 移動設定と基準位置が使用可能か確認する。
@@ -104,6 +122,18 @@ public class EnemyGroupMovementSettings : MonoBehaviour
     }
 
     /// <summary>
+    /// 指定段の進入完了位置を、通常移動と同じ拍補正で返す。
+    /// </summary>
+    /// <returns>段に対応するワールドY座標</returns>
+    public float GetSpawnRowY(int rowIndex, int beatsPerMeasure)
+    {
+        return EnemyGroupMovement.GetNormalPositionY(
+            normalStartPoint.position.y, diveStartPoint.position.y,
+            rowIndex * beatsPerMeasure,
+            normalPhaseMeasureCount * beatsPerMeasure);
+    }
+
+    /// <summary>
     /// 初期配置か追加生成かに応じてグループ移動を初期化する。
     /// </summary>
     /// <param name="groupMovement">初期化するグループ移動</param>
@@ -133,7 +163,8 @@ public class EnemyGroupMovementSettings : MonoBehaviour
                 diveChargeScaleY,
                 beatSquashScaleX,
                 beatSquashScaleY,
-                beatScaleRestoreProgress
+                beatScaleRestoreProgress,
+                elapsedMeasures
             );
             return;
         }

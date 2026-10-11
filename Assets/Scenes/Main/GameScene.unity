@@ -8361,6 +8361,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1763804959}
     - target: {fileID: 4329387076073847702, guid: 92b4c406074785647a0b628a93d3ae03, type: 3}
+      propertyPath: difficultyDatabase
+      value: 
+      objectReference: {fileID: 11400000, guid: f6c685d3a4af9064db3128561a1bd934, type: 2}
+    - target: {fileID: 4329387076073847702, guid: 92b4c406074785647a0b628a93d3ae03, type: 3}
       propertyPath: maxActiveGroupCount
       value: 0
       objectReference: {fileID: 0}
