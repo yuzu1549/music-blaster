@@ -111,7 +111,7 @@ public class MusicSelectController : MonoBehaviour
             settingsPanel.SetActive(false);
         }
 
-        selectedDifficultyIndex = 1;
+        RestoreLastPlayedSelection();
 
         UpdateSelectedValues();
         UpdateSongList();
@@ -120,6 +120,37 @@ public class MusicSelectController : MonoBehaviour
         UpdateScoreInfo();
 
         PlaySelectedMusic();
+    }
+
+    /// <summary>
+    /// 直前にプレイした曲と難易度を復元する。
+    /// </summary>
+    private void RestoreLastPlayedSelection()
+    {
+        centerSongIndex = 0;
+        selectedDifficultyIndex = 1;
+
+        int songIndex = System.Array.IndexOf(
+            songNames,
+            GameSceneArgs.SelectedMusic
+        );
+
+        if (songIndex < 0)
+        {
+            return;
+        }
+
+        centerSongIndex = songIndex;
+
+        int difficultyIndex = System.Array.IndexOf(
+            difficultyNames,
+            GameSceneArgs.SelectedDifficulty
+        );
+
+        if (difficultyIndex >= 0)
+        {
+            selectedDifficultyIndex = difficultyIndex;
+        }
     }
 
     /// <summary>
