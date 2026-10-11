@@ -12,16 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7a77e2d878583945b48a5f0e5d47daf, type: 3}
   m_Name: EnemyDifficultyDatabase
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDifficultyDatabase
-  defaultSettings:
-    initialGroupCount: 3
+  globalSettings:
+    spawnRowCount: 5
     firstGroupElapsedMeasures: 1
     initialGroupMeasureInterval: 2
     maxActiveGroupCount: 0
+    entryPhaseMeasureCount: 1
+    diveChargeBeatCount: 3
+    diveMovementBeatCount: 1
+  level1:
     rules:
     - spawnIntervalMeasures: 1
-      spawnGroupCount: 5
-    - spawnIntervalMeasures: 1
-      spawnGroupCount: 3
+      spawnGroupCount: 1
+    - spawnIntervalMeasures: 3
+      spawnGroupCount: 1
+    - spawnIntervalMeasures: 4
+      spawnGroupCount: 1
+    - spawnIntervalMeasures: 5
+      spawnGroupCount: 1
+    - spawnIntervalMeasures: 6
+      spawnGroupCount: 1
+    - spawnIntervalMeasures: 7
+      spawnGroupCount: 1
+  level2:
+    rules:
     - spawnIntervalMeasures: 1
       spawnGroupCount: 2
     - spawnIntervalMeasures: 1
@@ -30,20 +44,105 @@ MonoBehaviour:
       spawnGroupCount: 1
     - spawnIntervalMeasures: 3
       spawnGroupCount: 1
-    entryPhaseMeasureCount: 1
+    - spawnIntervalMeasures: 4
+      spawnGroupCount: 1
+    - spawnIntervalMeasures: 5
+      spawnGroupCount: 1
+  level3:
+    rules:
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 3
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 2
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 1
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 1
+    - spawnIntervalMeasures: 2
+      spawnGroupCount: 1
+    - spawnIntervalMeasures: 3
+      spawnGroupCount: 1
+  level4:
+    rules:
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 4
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 3
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 3
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 2
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 1
+    - spawnIntervalMeasures: 2
+      spawnGroupCount: 1
+  level5:
+    rules:
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 5
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 4
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 4
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 3
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 2
+    - spawnIntervalMeasures: 1
+      spawnGroupCount: 1
+  defaultSettings:
+    initialGroupCount: 3
+    spawnLevel: 4
     normalPhaseMeasureCount: 14
-    diveChargeBeatCount: 3
-    diveMovementBeatCount: 1
-  entries:
+  songs:
   - songName: ShiningStar
-    difficulty: Easy
-    settings:
-      initialGroupCount: 2
-      firstGroupElapsedMeasures: 1
-      initialGroupMeasureInterval: 0
-      maxActiveGroupCount: 0
-      rules: []
-      entryPhaseMeasureCount: 0
-      normalPhaseMeasureCount: 0
-      diveChargeBeatCount: 0
-      diveMovementBeatCount: 0
+    difficulties:
+    - difficulty: Easy
+      settings:
+        initialGroupCount: 2
+        spawnLevel: 1
+        normalPhaseMeasureCount: 14
+    - difficulty: Normal
+      settings:
+        initialGroupCount: 3
+        spawnLevel: 2
+        normalPhaseMeasureCount: 14
+    - difficulty: Hard
+      settings:
+        initialGroupCount: 4
+        spawnLevel: 4
+        normalPhaseMeasureCount: 14
+  - songName: MereFancy
+    difficulties:
+    - difficulty: Easy
+      settings:
+        initialGroupCount: 2
+        spawnLevel: 2
+        normalPhaseMeasureCount: 12
+    - difficulty: Normal
+      settings:
+        initialGroupCount: 3
+        spawnLevel: 3
+        normalPhaseMeasureCount: 12
+    - difficulty: Hard
+      settings:
+        initialGroupCount: 4
+        spawnLevel: 4
+        normalPhaseMeasureCount: 12
+  - songName: SnowDrive0123
+    difficulties:
+    - difficulty: Easy
+      settings:
+        initialGroupCount: 2
+        spawnLevel: 2
+        normalPhaseMeasureCount: 18
+    - difficulty: Normal
+      settings:
+        initialGroupCount: 3
+        spawnLevel: 4
+        normalPhaseMeasureCount: 18
+    - difficulty: Hard
+      settings:
+        initialGroupCount: 4
+        spawnLevel: 5
+        normalPhaseMeasureCount: 18

@@ -215,6 +215,14 @@ public class EnemySpawnScheduler : MonoBehaviour
             return false;
         }
 
+        if (!difficultyDatabase.TryGetSpawnRules(
+            settings.spawnLevel, out EnemyGroupSpawnRule[] rules,
+            out errorMessage))
+        {
+            Debug.LogError($"{name}: {errorMessage}");
+            return false;
+        }
+
         EnemyGroupMovementSettings movement = GetComponent<EnemyGroupMovementSettings>();
         if (movement == null)
         {
@@ -227,10 +235,10 @@ public class EnemySpawnScheduler : MonoBehaviour
         initialGroupMeasureInterval = global.initialGroupMeasureInterval;
         maxActiveGroupCount = global.maxActiveGroupCount;
         // アセットのプレイ中編集を現在のプレイへ反映させない。
-        playbackRules = new EnemyGroupSpawnRule[settings.rules.Length];
+        playbackRules = new EnemyGroupSpawnRule[rules.Length];
         for (int index = 0; index < playbackRules.Length; index++)
         {
-            EnemyGroupSpawnRule rule = settings.rules[index];
+            EnemyGroupSpawnRule rule = rules[index];
             playbackRules[index] = new EnemyGroupSpawnRule(
                 rule.SpawnIntervalMeasures, rule.SpawnGroupCount);
         }

@@ -9,6 +9,51 @@ using UnityEngine;
     menuName = "Data/Enemy Difficulty Database")]
 public sealed class EnemyDifficultyDatabase : ScriptableObject
 {
+    [Header("レベル1の追加生成ルール")]
+    [SerializeField] private EnemySpawnPreset level1 = new(
+        new EnemyGroupSpawnRule(1, 1),
+        new EnemyGroupSpawnRule(2, 1),
+        new EnemyGroupSpawnRule(3, 1),
+        new EnemyGroupSpawnRule(4, 1),
+        new EnemyGroupSpawnRule(5, 1),
+        new EnemyGroupSpawnRule(6, 1));
+
+    [Header("レベル2の追加生成ルール")]
+    [SerializeField] private EnemySpawnPreset level2 = new(
+        new EnemyGroupSpawnRule(1, 2),
+        new EnemyGroupSpawnRule(1, 1),
+        new EnemyGroupSpawnRule(2, 1),
+        new EnemyGroupSpawnRule(3, 1),
+        new EnemyGroupSpawnRule(4, 1),
+        new EnemyGroupSpawnRule(5, 1));
+
+    [Header("レベル3の追加生成ルール")]
+    [SerializeField] private EnemySpawnPreset level3 = new(
+        new EnemyGroupSpawnRule(1, 3),
+        new EnemyGroupSpawnRule(1, 2),
+        new EnemyGroupSpawnRule(1, 1),
+        new EnemyGroupSpawnRule(2, 1),
+        new EnemyGroupSpawnRule(3, 1),
+        new EnemyGroupSpawnRule(4, 1));
+
+    [Header("レベル4の追加生成ルール")]
+    [SerializeField] private EnemySpawnPreset level4 = new(
+        new EnemyGroupSpawnRule(1, 4),
+        new EnemyGroupSpawnRule(1, 3),
+        new EnemyGroupSpawnRule(1, 2),
+        new EnemyGroupSpawnRule(1, 1),
+        new EnemyGroupSpawnRule(2, 1),
+        new EnemyGroupSpawnRule(3, 1));
+
+    [Header("レベル5の追加生成ルール")]
+    [SerializeField] private EnemySpawnPreset level5 = new(
+        new EnemyGroupSpawnRule(1, 5),
+        new EnemyGroupSpawnRule(1, 4),
+        new EnemyGroupSpawnRule(1, 3),
+        new EnemyGroupSpawnRule(1, 2),
+        new EnemyGroupSpawnRule(1, 1),
+        new EnemyGroupSpawnRule(2, 1));
+
     [Header("すべての曲・難易度に適用する全体設定")]
     [SerializeField] private EnemyGlobalSettings globalSettings = new();
     [Header("未登録の曲・難易度に使用する共通設定")]
@@ -44,6 +89,59 @@ public sealed class EnemyDifficultyDatabase : ScriptableObject
         }
 
         return defaultSettings;
+    }
+
+    /// <summary>
+    /// 選択したレベルの生成ルールを取得し、設定値を検証する。
+    /// </summary>
+    /// <returns>使用可能なルールを取得できた場合はtrue</returns>
+    public bool TryGetSpawnRules(
+        EnemySpawnLevel level, out EnemyGroupSpawnRule[] rules,
+        out string errorMessage)
+    {
+        EnemySpawnPreset preset = level switch
+        {
+            EnemySpawnLevel.Level1 => level1,
+            EnemySpawnLevel.Level2 => level2,
+            EnemySpawnLevel.Level3 => level3,
+            EnemySpawnLevel.Level4 => level4,
+            EnemySpawnLevel.Level5 => level5,
+            _ => null
+        };
+        rules = preset?.Rules;
+        if (rules == null || rules.Length == 0 ||
+            Array.Exists(rules, rule => rule == null || !rule.IsValid))
+        {
+            errorMessage = "生成レベルと、1以上の待機小節数・生成数を設定してください。";
+            return false;
+        }
+
+        errorMessage = string.Empty;
+        return true;
+    }
+}
+
+public enum EnemySpawnLevel
+{
+    Level1 = 1,
+    Level2 = 2,
+    Level3 = 3,
+    Level4 = 4,
+    Level5 = 5
+}
+
+[Serializable]
+public sealed class EnemySpawnPreset
+{
+    [Header("生存グループ数ごとの生成ルール")]
+    [Tooltip("配列番号が生存数。最後の要素はその数以上にも使用します")]
+    [SerializeField] private EnemyGroupSpawnRule[] rules;
+
+    public EnemyGroupSpawnRule[] Rules => rules;
+
+    public EnemySpawnPreset(params EnemyGroupSpawnRule[] rules)
+    {
+        this.rules = rules;
     }
 }
 
@@ -135,12 +233,8 @@ public sealed class EnemyDifficultySettings
 {
     [Header("初期配置するグループ数")]
     [Min(0)] public int initialGroupCount = 3;
-    [Header("生存グループ数ごとの生成ルール（配列番号が生存数）")]
-    public EnemyGroupSpawnRule[] rules =
-    {
-        new(1, 5), new(1, 3), new(1, 2),
-        new(1, 1), new(2, 1), new(3, 1)
-    };
+    [Header("追加生成に使用するレベル")]
+    public EnemySpawnLevel spawnLevel = EnemySpawnLevel.Level4;
     [Header("通常フェーズの小節数")]
     [Min(1)] public int normalPhaseMeasureCount = 14;
 
@@ -170,13 +264,6 @@ public sealed class EnemyDifficultySettings
         if (initialGroupCount > 0 && lastElapsed >= normalPhaseMeasureCount)
         {
             errorMessage = "初期グループの経過小節数は通常フェーズの長さ未満にしてください。";
-            return false;
-        }
-
-        if (rules == null || rules.Length == 0 ||
-            Array.Exists(rules, rule => rule == null || !rule.IsValid))
-        {
-            errorMessage = "生成ルールには1以上の待機小節数・生成数を設定してください。";
             return false;
         }
 
