@@ -9414,7 +9414,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 5ee9b75d2a0f09e44b8f46154911fe56, type: 3}
     - target: {fileID: 7678281160680400679, guid: 92b4c406074785647a0b628a93d3ae03, type: 3}
       propertyPath: diveStartSEVolume
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7678281160680400679, guid: 92b4c406074785647a0b628a93d3ae03, type: 3}
       propertyPath: chargeEffectPrefab
@@ -9422,7 +9422,7 @@ PrefabInstance:
       objectReference: {fileID: 1085203053202936996, guid: f5e5628df1681ed458ed0d5df7ac7a87, type: 3}
     - target: {fileID: 7678281160680400679, guid: 92b4c406074785647a0b628a93d3ae03, type: 3}
       propertyPath: chargeStartSEVolume
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7678281160680400679, guid: 92b4c406074785647a0b628a93d3ae03, type: 3}
       propertyPath: diveStartEffectPrefab

@@ -13,12 +13,14 @@ public class EnemyChargeEffectController : MonoBehaviour
     [Header("チャージ開始時に再生するSE")]
     [SerializeField] private AudioClip chargeStartSE;
     [Header("チャージ開始SEの音量倍率")]
-    [Range(0f, 1f)]
+    [Tooltip("1を超える値で増幅できます。大きくしすぎると音割れします")]
+    [Min(0f)]
     [SerializeField] private float chargeStartSEVolume = 1f;
     [Header("突撃開始時に再生するSE")]
     [SerializeField] private AudioClip diveStartSE;
     [Header("突撃開始SEの音量倍率")]
-    [Range(0f, 1f)]
+    [Tooltip("1を超える値で増幅できます。大きくしすぎると音割れします")]
+    [Min(0f)]
     [SerializeField] private float diveStartSEVolume = 1f;
 
     /// <summary>

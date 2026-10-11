@@ -97,8 +97,8 @@ public class EnemyGroupChargeEffect : MonoBehaviour
         chargeStartSE = newChargeStartSE;
         diveStartSE = newDiveStartSE;
         effectOffset = newEffectOffset;
-        chargeStartSEVolume = Mathf.Clamp01(newChargeStartSEVolume);
-        diveStartSEVolume = Mathf.Clamp01(newDiveStartSEVolume);
+        chargeStartSEVolume = Mathf.Max(0f, newChargeStartSEVolume);
+        diveStartSEVolume = Mathf.Max(0f, newDiveStartSEVolume);
     }
 
     /// <summary>
