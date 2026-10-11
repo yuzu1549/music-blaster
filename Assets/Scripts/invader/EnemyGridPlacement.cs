@@ -189,6 +189,49 @@ public class EnemyGridPlacement : MonoBehaviour
     }
 
     /// <summary>
+    /// 進入完了時の予測位置に対し、指定段の列が空いているか確認する。
+    /// </summary>
+    /// <returns>既存・進入中のグループと重ならない場合はtrue</returns>
+    public bool CanSpawnAtArrival(
+        int startColumn,
+        IReadOnlyList<EnemyGroupController> activeGroups,
+        float arrivalY,
+        float arrivalBeat)
+    {
+        int firstColumn = startColumn - minimumGroupGapColumns;
+        int lastColumn = startColumn + GroupColumnSpan - 1 + minimumGroupGapColumns;
+        foreach (EnemyGroupController group in activeGroups)
+        {
+            if (group == null)
+            {
+                continue;
+            }
+
+            float predictedY = group.transform.position.y;
+            if (group.TryGetComponent(out EnemyGroupMovement movement) &&
+                !movement.TryPredictPositionY(arrivalBeat, out predictedY))
+            {
+                continue;
+            }
+
+            // 最低距離が0でも、同一段・同一列への重複は許可しない。
+            float distance = Mathf.Abs(predictedY - arrivalY);
+            if (distance > 0.0001f && distance >= minimumGroupVerticalSpacing)
+            {
+                continue;
+            }
+
+            int groupLastColumn = group.StartColumn + group.ColumnSpan - 1;
+            if (firstColumn <= groupLastColumn && lastColumn >= group.StartColumn)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
     /// 指定したグリッド列に対応するワールドX座標を返す。
     /// </summary>
     /// <param name="column">左から0始まりの列番号</param>

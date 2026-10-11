@@ -250,33 +250,51 @@ public class EnemySpawner : MonoBehaviour
     }
 
     /// <summary>
-    /// 空いている列を選び、進入フェーズからグループを生成する。
+    /// 到着時に空いている段と列を選び、最上部からグループを進入させる。
     /// </summary>
     /// <returns>生成できた場合は true</returns>
     private bool TrySpawnAdditionalGroup()
     {
+        int beatsPerMeasure = spawnScheduler.MusicBeatClock.BeatsPerMeasure;
+        float arrivalBeat = spawnScheduler.MusicBeatClock.CurrentBeatIndex +
+            movementSettings.EntryPhaseMeasureCount * beatsPerMeasure;
+        List<int> rows = new List<int>(movementSettings.SpawnRowCount);
+        for (int row = 0; row < movementSettings.SpawnRowCount; row++)
+        {
+            rows.Add(row);
+        }
+
+        // 段の順序を均等にシャッフルし、空きのある段をランダムに選ぶ。
+        for (int index = rows.Count - 1; index > 0; index--)
+        {
+            int other = Random.Range(0, index + 1);
+            (rows[index], rows[other]) = (rows[other], rows[index]);
+        }
+
         List<int> candidates =
             gridPlacement.CreateOrderedStartColumnCandidates(
                 activeGroups,
                 movementSettings.EntryStartPoint.position.y,
                 movementSettings.DiveStartPoint.position.y
             );
-        foreach (int startColumn in candidates)
+        foreach (int row in rows)
         {
-            if (!gridPlacement.CanSpawnAtEntry(
-                startColumn,
-                activeGroups,
-                movementSettings.EntryStartPoint.position.y))
+            float arrivalY = movementSettings.GetSpawnRowY(row, beatsPerMeasure);
+            foreach (int startColumn in candidates)
             {
-                continue;
-            }
+                if (!gridPlacement.CanSpawnAtArrival(
+                    startColumn, activeGroups, arrivalY, arrivalBeat))
+                {
+                    continue;
+                }
 
-            return SpawnGroup(
-                startColumn,
-                movementSettings.EntryStartPoint.position.y,
-                0f,
-                true
-            );
+                return SpawnGroup(
+                    startColumn,
+                    movementSettings.EntryStartPoint.position.y,
+                    row,
+                    true
+                );
+            }
         }
 
         return false;

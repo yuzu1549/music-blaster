@@ -44,6 +44,7 @@ public class EnemyGroupMovement : MonoBehaviour
     private int diveChargeBeats = 3;
     private int diveMovementBeats = 1;
     private int elapsedNormalPhaseBeats;
+    private float entryTargetY;
     private int continuousPhaseStartBeat;
     private float entryDecelerationPower;
     private float diveChargeScaleX;
@@ -217,7 +218,8 @@ public class EnemyGroupMovement : MonoBehaviour
         float chargeScaleY,
         float beatSquashScaleX,
         float beatSquashScaleY,
-        float restoreBeatProgress)
+        float restoreBeatProgress,
+        float elapsedNormalMeasures = 0f)
     {
         Configure(
             beatClock,
@@ -243,6 +245,11 @@ public class EnemyGroupMovement : MonoBehaviour
         }
 
         currentPhase = MovementPhase.Entry;
+        elapsedNormalPhaseBeats = Mathf.Clamp(
+            Mathf.RoundToInt(elapsedNormalMeasures * musicBeatClock.BeatsPerMeasure),
+            0, normalPhaseBeats - 1);
+        entryTargetY = GetNormalPositionY(normalStartY, diveStartY,
+            elapsedNormalPhaseBeats, normalPhaseBeats);
         continuousPhaseStartBeat = Mathf.Max(
             0,
             musicBeatClock.CurrentBeatIndex
@@ -342,7 +349,6 @@ public class EnemyGroupMovement : MonoBehaviour
             }
 
             currentPhase = MovementPhase.Normal;
-            elapsedNormalPhaseBeats = 0;
             UpdateNormalPhasePosition();
             StartBeatScaleAnimation();
             return;
@@ -396,7 +402,7 @@ public class EnemyGroupMovement : MonoBehaviour
                 1f - phaseProgress,
                 entryDecelerationPower
             );
-            SetGroupY(Mathf.Lerp(entryStartY, normalStartY, easedProgress));
+            SetGroupY(Mathf.Lerp(entryStartY, entryTargetY, easedProgress));
             return;
         }
 
@@ -466,10 +472,88 @@ public class EnemyGroupMovement : MonoBehaviour
     /// </summary>
     private void UpdateNormalPhasePosition()
     {
-        float normalPhaseProgress =
-            (float)(elapsedNormalPhaseBeats + 1) /
-            (normalPhaseBeats + 1);
-        SetGroupY(Mathf.Lerp(normalStartY, diveStartY, normalPhaseProgress));
+        SetGroupY(GetNormalPositionY(normalStartY, diveStartY,
+            elapsedNormalPhaseBeats, normalPhaseBeats));
+    }
+
+    /// <summary>
+    /// 通常フェーズの拍位置に対応するY座標を計算する。
+    /// </summary>
+    /// <returns>通常フェーズのワールドY座標</returns>
+    public static float GetNormalPositionY(
+        float startY, float endY, int elapsedBeats, int durationBeats)
+    {
+        return Mathf.Lerp(startY, endY,
+            (float)(elapsedBeats + 1) / (durationBeats + 1));
+    }
+
+    /// <summary>
+    /// 指定した将来の拍で生存している場合、そのグループ位置を予測する。
+    /// 演出・イベント・実際の移動状態は変更しない。
+    /// </summary>
+    /// <param name="targetBeat">進入完了時の絶対拍位置</param>
+    /// <returns>指定拍でもグループが存在する場合はtrue</returns>
+    public bool TryPredictPositionY(float targetBeat, out float positionY)
+    {
+        positionY = transform.position.y;
+        if (!isInitialized || currentPhase == MovementPhase.Completed)
+        {
+            return false;
+        }
+
+        if (musicBeatClock.IsCombatStopped)
+        {
+            return true;
+        }
+
+        float normalEndBeat;
+        int normalElapsed;
+        if (currentPhase == MovementPhase.Entry)
+        {
+            float entryEndBeat = continuousPhaseStartBeat + entryPhaseBeats;
+            if (targetBeat < entryEndBeat)
+            {
+                float progress = Mathf.Clamp01(
+                    (targetBeat - continuousPhaseStartBeat) / entryPhaseBeats);
+                float eased = 1f - Mathf.Pow(1f - progress, entryDecelerationPower);
+                positionY = Mathf.Lerp(entryStartY, entryTargetY, eased);
+                return true;
+            }
+
+            normalElapsed = elapsedNormalPhaseBeats +
+                Mathf.FloorToInt(targetBeat - entryEndBeat);
+            normalEndBeat = entryEndBeat + normalPhaseBeats - elapsedNormalPhaseBeats;
+        }
+        else if (currentPhase == MovementPhase.Normal)
+        {
+            int currentBeat = musicBeatClock.CurrentBeatIndex;
+            normalElapsed = elapsedNormalPhaseBeats +
+                Mathf.Max(0, Mathf.FloorToInt(targetBeat) - currentBeat);
+            normalEndBeat = currentBeat + normalPhaseBeats - elapsedNormalPhaseBeats;
+        }
+        else
+        {
+            normalElapsed = normalPhaseBeats;
+            normalEndBeat = continuousPhaseStartBeat;
+        }
+
+        if (normalElapsed < normalPhaseBeats)
+        {
+            positionY = GetNormalPositionY(normalStartY, diveStartY,
+                normalElapsed, normalPhaseBeats);
+            return true;
+        }
+
+        float diveElapsed = targetBeat - normalEndBeat;
+        if (diveElapsed >= DivePhaseBeats)
+        {
+            return false;
+        }
+
+        float diveProgress = Mathf.Clamp01(
+            (diveElapsed - diveChargeBeats) / diveMovementBeats);
+        positionY = Mathf.Lerp(diveStartY, diveEndY, diveProgress);
+        return true;
     }
 
     /// <summary>
