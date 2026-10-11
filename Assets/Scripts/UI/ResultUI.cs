@@ -59,6 +59,10 @@ public class ResultUI : MonoBehaviour
     [Header("曲データベース")]
     [SerializeField] private SongDatabaseSO songDatabase;
 
+    [Header("共通のランク達成率設定")]
+    [Tooltip("選曲画面と同じScoreRankSettingsを割り当ててください")]
+    [SerializeField] private ScoreRankSettings rankSettings;
+
     [Header("リターンボタン")]
     [SerializeField]
     private GameObject returnButton;
@@ -313,7 +317,10 @@ public class ResultUI : MonoBehaviour
     /// </summary>
     private void RankUpdate()
     {
-        string rank = new ScoreRankCalculator().Calculate(GameManager.Instance.score, GameManager.Instance.maxScore);
+        string rank = new ScoreRankCalculator().Calculate(
+            GameManager.Instance.score,
+            GameManager.Instance.maxScore,
+            rankSettings);
         resultText.rankText.GetComponent<TMPro.TextMeshProUGUI>().text = "<color=white>ランク：</color>";
         switch (rank)
         {

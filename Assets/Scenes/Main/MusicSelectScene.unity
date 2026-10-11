@@ -1488,6 +1488,7 @@ MonoBehaviour:
   rankC: {fileID: 21300000, guid: ec1258c70a4dda6498712e8d52c2bc00, type: 3}
   rankD: {fileID: 21300000, guid: a74c6536dbb260e469514e4fe94a78cd, type: 3}
   songDatabase: {fileID: 11400000, guid: 329127d0810bb9d46a35f67a5caf1860, type: 2}
+  rankSettings: {fileID: 11400000, guid: 7276f9165acf0494287a41163382df34, type: 2}
   confirmButton: {fileID: 1238504086}
   settingsPanel: {fileID: 386514045}
 --- !u!114 &185778397 stripped
