@@ -121,7 +121,8 @@ public class IntegrationSceneUI : MonoBehaviour
             //totalTimeText = FormatTime(musicClip.length);
         //}
 
-        UpdateMusicInfoText(titleText, "Title", GameManager.Instance.musicTitle);
+        UpdateMusicInfoText(titleText, "Title",
+            SongDisplayName.Get(GameManager.Instance.musicTitle));
         UpdateMusicInfoText(artistText, "Artist", GameManager.Instance.artistName);
         UpdateMusicInfoText(difficultyText, "Difficulty", GameManager.Instance.difficulty,
             GetDifficultyColor(GameManager.Instance.difficulty));

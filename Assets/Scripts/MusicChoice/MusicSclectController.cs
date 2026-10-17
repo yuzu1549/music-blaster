@@ -435,7 +435,7 @@ public class MusicSelectController : MonoBehaviour
             }
 
             songItems[i].SetTitle(
-                songNames[songIndex]
+                SongDisplayName.Get(songNames[songIndex])
             );
 
             songItems[i].SetSelected(
@@ -455,7 +455,7 @@ public class MusicSelectController : MonoBehaviour
         }
 
         songInfoPanel.SetSongInfo(
-            songNames[centerSongIndex],
+            SongDisplayName.Get(songNames[centerSongIndex]),
             jacketSprites[centerSongIndex]
         );
 
