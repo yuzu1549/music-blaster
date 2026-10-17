@@ -2411,10 +2411,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a7ab136cb19a464c87a73e5b822b168, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OsuConverter
-  osuTextFile: {fileID: 4900000, guid: 96cbbdc16fda88a4fa67000830a14d02, type: 3}
+  osuTextFile: {fileID: 4900000, guid: 12f7a183cadf9034d8920165d5c579bd, type: 3}
   bpm: 132
-  outputFileName: MereFancy_Easy2.txt
-  quantizeDivision: 24
+  outputFileName: MereFancy_Hard_Fix.txt
+  quantizeDivision: 48
 --- !u!4 &343468541
 Transform:
   m_ObjectHideFlags: 0

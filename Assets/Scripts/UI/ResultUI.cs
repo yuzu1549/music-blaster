@@ -138,7 +138,8 @@ public class ResultUI : MonoBehaviour
     private void SongInfoTextUpdate()
     {
         // 曲名と難易度の表示
-        resultText.songTitleText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.Instance.musicTitle;
+        resultText.songTitleText.GetComponent<TMPro.TextMeshProUGUI>().text =
+            SongDisplayName.Get(GameManager.Instance.musicTitle);
         resultText.difficultyText.GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.Instance.difficulty;
     }
 
