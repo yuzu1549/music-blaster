@@ -5,35 +5,64 @@ public class EnemyAttack : MonoBehaviour
     [Header("スポーンする弾の名前")]
     [SerializeField] private string bulletName = "EnemyBullet";
 
-    private GameObject bullet;
+    [Header("弾の色コード")]
+    [Tooltip("#RRGGBB または #RRGGBBAA 形式で指定してください（例: #b44141）")]
+    [SerializeField] private string bulletColorCode = "#ff8c57";
 
-    private void Update()
+    private Color bulletColor = Color.blue;
+
+    /// <summary>
+    /// 色コードを解析して弾の表示色を初期化する。
+    /// </summary>
+    private void Awake()
     {
+        ApplyBulletColorCode();
     }
 
     /// <summary>
-    /// 弾をスポーンさせる処理
+    /// Inspector で変更した色コードを弾の表示色へ反映する。
     /// </summary>
-    public void Attack()
+    private void OnValidate()
     {
-        if (bulletName != null)
+        ApplyBulletColorCode();
+    }
+
+    /// <summary>
+    /// 色コードを表示色に変換し、無効な場合は赤を使用する。
+    /// </summary>
+    private void ApplyBulletColorCode()
+    {
+        if (!ColorUtility.TryParseHtmlString(bulletColorCode, out bulletColor))
         {
-            // プールから弾を取得
-            bullet = PoolManager.Instance.Get(bulletName);
-            if (bullet != null)
-            {
-                bullet.transform.position = transform.position; // 弾の位置を敵の位置に設定
-                bullet.GetComponent<EnemyBullet>().Attack(); // 弾を発射して攻撃する
-            }
-            else
-            {
-                Debug.LogError($"{name}: プールから {bulletName} を取得できませんでした。");
-            }
-        }
-        else
-        {
-            Debug.LogError($"{name}: bulletName が設定されていません。");
+            bulletColor = Color.red;
+            Debug.LogWarning($"{name}: 弾の色コード {bulletColorCode} が無効なため、#FF0000 を使用します。");
         }
     }
 
+    /// <summary>
+    /// プールから弾を取得し、設定した色を反映して発射する。
+    /// </summary>
+    public void Attack()
+    {
+        if (string.IsNullOrEmpty(bulletName))
+        {
+            Debug.LogError($"{name}: bulletName が設定されていません。");
+            return;
+        }
+
+        GameObject spawnedBullet = PoolManager.Instance.Get(bulletName);
+        if (spawnedBullet == null)
+        {
+            Debug.LogError($"{name}: プールから {bulletName} を取得できませんでした。");
+            return;
+        }
+
+        spawnedBullet.transform.position = transform.position;
+        if (spawnedBullet.TryGetComponent(out SpriteRenderer bulletSpriteRenderer))
+        {
+            bulletSpriteRenderer.color = bulletColor;
+        }
+
+        spawnedBullet.GetComponent<EnemyBullet>().Attack();
+    }
 }

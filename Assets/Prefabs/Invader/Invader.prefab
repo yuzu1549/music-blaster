@@ -215,6 +215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
   bulletName: EnemyBullet
+  bulletColorCode: '#ff8c57'
 --- !u!95 &7056754621264529021
 Animator:
   serializedVersion: 7
