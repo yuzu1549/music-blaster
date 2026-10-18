@@ -15363,7 +15363,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50d31572727a58a409ee1c83f4c9f5a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameDebug
-  isDebugMode: 1
+  isDebugMode: 0
   gameFinish: {fileID: 1827994862}
   playerHealth: {fileID: 1989533468}
 --- !u!1 &1535303844
@@ -20156,6 +20156,8 @@ MonoBehaviour:
   resumeCountdownText: {fileID: 2098911131}
   optionsOverlayController: {fileID: 1585856589}
   optionsKeyConfigController: {fileID: 926262772}
+  pauseOpenClip: {fileID: 8300000, guid: 66f4dd395aed14b5abc1b5684bca2d0f, type: 3}
+  pauseSeMixerGroup: {fileID: -6836218357167828027, guid: ac334f8201eac3b418a04e2e161658ec, type: 2}
 --- !u!4 &1962318879 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5047857214377262065, guid: 51a6103e219b1174ebcb5bae68254860, type: 3}

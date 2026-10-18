@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -40,8 +41,20 @@ public class GamePauseController : MonoBehaviour
     [SerializeField] private OptionsKeyConfigController
         optionsKeyConfigController;
 
+    [Header("ポーズ画面を開くときの効果音")]
+    [SerializeField] private AudioClip pauseOpenClip;
+    [SerializeField] private AudioMixerGroup pauseSeMixerGroup;
+
     private PauseState currentState = PauseState.Playing;
     private Coroutine resumeCountdownCoroutine;
+    private AudioSource pauseOpenSource;
+
+    private void Awake()
+    {
+        pauseOpenSource = gameObject.AddComponent<AudioSource>();
+        pauseOpenSource.playOnAwake = false;
+        pauseOpenSource.outputAudioMixerGroup = pauseSeMixerGroup;
+    }
 
     private void OnEnable()
     {
@@ -80,6 +93,10 @@ public class GamePauseController : MonoBehaviour
         if (currentState == PauseState.Playing)
         {
             PauseGame();
+            if (currentState == PauseState.Paused && pauseOpenClip != null)
+            {
+                pauseOpenSource.PlayOneShot(pauseOpenClip);
+            }
         }
         else if (currentState == PauseState.Paused)
         {
