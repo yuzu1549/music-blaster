@@ -827,7 +827,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 926262772}
         m_TargetAssemblyTypeName: OptionsKeyConfigController, Assembly-CSharp
         m_MethodName: SelectInvaderRight
         m_Mode: 1
@@ -1686,7 +1686,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 926262772}
         m_TargetAssemblyTypeName: OptionsKeyConfigController, Assembly-CSharp
         m_MethodName: SelectInvaderLeft
         m_Mode: 1
@@ -4053,8 +4053,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: OptionsOverlayController, Assembly-CSharp
+      - m_Target: {fileID: 1960072325}
+        m_TargetAssemblyTypeName: GamePauseController, Assembly-CSharp
         m_MethodName: CloseOptions
         m_Mode: 1
         m_Arguments:
@@ -4261,8 +4261,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: OptionsOverlayController, Assembly-CSharp
+      - m_Target: {fileID: 1960072325}
+        m_TargetAssemblyTypeName: GamePauseController, Assembly-CSharp
         m_MethodName: CloseOptions
         m_Mode: 1
         m_Arguments:
@@ -4960,7 +4960,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1585856589}
         m_TargetAssemblyTypeName: OptionsOverlayController, Assembly-CSharp
         m_MethodName: SetTimingOffset
         m_Mode: 0
@@ -7492,7 +7492,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1960072325}
         m_TargetAssemblyTypeName: GamePauseController, Assembly-CSharp
-        m_MethodName: CloseOptionsAndResume
+        m_MethodName: CloseOptions
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10569,7 +10569,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1585856589}
         m_TargetAssemblyTypeName: OptionsOverlayController, Assembly-CSharp
         m_MethodName: SetSeVolume
         m_Mode: 0
@@ -12401,7 +12401,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1585856589}
         m_TargetAssemblyTypeName: OptionsOverlayController, Assembly-CSharp
         m_MethodName: SetBgmVolume
         m_Mode: 0
@@ -12626,7 +12626,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 926262772}
         m_TargetAssemblyTypeName: OptionsKeyConfigController, Assembly-CSharp
         m_MethodName: SelectRhythmLeft
         m_Mode: 1
@@ -14091,7 +14091,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 926262772}
         m_TargetAssemblyTypeName: OptionsKeyConfigController, Assembly-CSharp
         m_MethodName: SelectRhythmRight
         m_Mode: 1
@@ -14836,7 +14836,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1585856589}
         m_TargetAssemblyTypeName: OptionsOverlayController, Assembly-CSharp
         m_MethodName: SetNoteSpeed
         m_Mode: 0
@@ -19081,7 +19081,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 316, y: 190}
-  m_SizeDelta: {x: 496, y: 300}
+  m_SizeDelta: {x: 496, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1853407001
 MonoBehaviour:
