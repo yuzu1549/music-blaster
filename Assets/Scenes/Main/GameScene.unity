@@ -14516,7 +14516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyScorePopupController
   scorePopupPrefab: {fileID: 1193647328543190064, guid: e506edd9f59c4b0449cb322a4f7cc287, type: 3}
   popupParent: {fileID: 0}
-  worldOffset: {x: 0, y: 0.2, z: 0}
+  worldOffset: {x: 0, y: 0.3, z: 0}
 --- !u!1 &1490894203
 GameObject:
   m_ObjectHideFlags: 0
