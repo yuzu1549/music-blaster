@@ -47,6 +47,8 @@ public class IntegrationSceneUI : MonoBehaviour
     private float currentTime = 0f;
     private bool isTimerRunning = false;
     private bool isGameOver = false;
+    private string displayedSongTitle;
+    private float displayedTitleAvailableWidth = -1f;
 
     private void Start()
     {
@@ -121,8 +123,7 @@ public class IntegrationSceneUI : MonoBehaviour
             //totalTimeText = FormatTime(musicClip.length);
         //}
 
-        UpdateMusicInfoText(titleText, "Title",
-            SongDisplayName.Get(GameManager.Instance.musicTitle));
+        UpdateTitleText(SongDisplayName.Get(GameManager.Instance.musicTitle));
         UpdateMusicInfoText(artistText, "Artist", GameManager.Instance.artistName);
         UpdateMusicInfoText(difficultyText, "Difficulty", GameManager.Instance.difficulty,
             GetDifficultyColor(GameManager.Instance.difficulty));
@@ -143,6 +144,41 @@ public class IntegrationSceneUI : MonoBehaviour
             //timeText.text = $"Time:\n{currentTimeText} / {totalTimeText}";
             //timeText.fontSize = 32;
         //}
+    }
+
+    /// <summary>
+    /// ラベルの大きさを保ち、曲名だけを表示幅に合わせて縮小する。
+    /// </summary>
+    private void UpdateTitleText(string songTitle)
+    {
+        if (titleText == null) return;
+
+        string content = string.IsNullOrEmpty(songTitle) ? "Unknown" : songTitle;
+        Vector4 margins = titleText.margin;
+        float availableWidth = Mathf.Max(1f,
+            titleText.rectTransform.rect.width - margins.x - margins.z);
+        if (content == displayedSongTitle &&
+            Mathf.Approximately(availableWidth, displayedTitleAvailableWidth))
+        {
+            return;
+        }
+
+        const float defaultFontSize = 40f;
+        titleText.enableAutoSizing = false;
+        titleText.textWrappingMode = TextWrappingModes.NoWrap;
+        titleText.fontSize = defaultFontSize;
+
+        // TMP が計測結果に加える正の余白を除き、文字そのものの幅を求める。
+        float titleWidth = titleText.GetPreferredValues(
+            content, Mathf.Infinity, Mathf.Infinity).x
+            - Mathf.Max(0f, margins.x) - Mathf.Max(0f, margins.z);
+        float fittedFontSize = defaultFontSize *
+            Mathf.Min(1f, availableWidth / Mathf.Max(1f, titleWidth));
+        string fontSize = fittedFontSize.ToString("0.###", CultureInfo.InvariantCulture);
+        titleText.SetText($"<size=75%><color=#B0B8C4>Title</color></size>\n<size={fontSize}>{content}</size>");
+
+        displayedSongTitle = content;
+        displayedTitleAvailableWidth = availableWidth;
     }
 
     private static void UpdateMusicInfoText(TextMeshProUGUI text, string label, string value, string valueColor = null)
