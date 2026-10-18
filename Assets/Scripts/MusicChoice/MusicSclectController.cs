@@ -59,9 +59,9 @@ public class MusicSelectController : MonoBehaviour
 
     private readonly string[] artistNames =
     {
-        "森田交一",
-        "kさん",
-        "sさん"
+        "魔王魂",
+        "LeaF",
+        "Omoi"
     };
 
     private readonly Sprite[] jacketSprites =
