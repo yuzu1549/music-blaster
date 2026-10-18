@@ -486,7 +486,10 @@ public class NoteManager : MonoBehaviour
 
 		double currentDspTime = AudioSettings.dspTime - dspStartTime;
 
-		if (delayTime <= currentDspTime && audioSource.isPlaying)
+		// Web では AudioSource.time がポーズ解除後に先へ進むことがある。
+		// 譜面と拍は、ポーズ時間を差し引いた DSP 時刻で揃える。
+		if (Application.platform != RuntimePlatform.WebGLPlayer &&
+			delayTime <= currentDspTime && audioSource.isPlaying)
 		{
 			return audioSource.time;
 		}
@@ -566,7 +569,15 @@ public class NoteManager : MonoBehaviour
 
 		if (wasMusicPlayingBeforePause)
 		{
-			audioSource.Pause();
+			if (Application.platform == RuntimePlatform.WebGLPlayer)
+			{
+				// Web の Pause/UnPause は再開位置がずれる場合がある。
+				audioSource.Stop();
+			}
+			else
+			{
+				audioSource.Pause();
+			}
 			return;
 		}
 
@@ -590,7 +601,16 @@ public class NoteManager : MonoBehaviour
 
 		if (wasMusicPlayingBeforePause)
 		{
-			audioSource.UnPause();
+			if (Application.platform == RuntimePlatform.WebGLPlayer)
+			{
+				audioSource.time = Mathf.Clamp(
+					pausedAudioTime, 0f, audioSource.clip.length);
+				audioSource.Play();
+			}
+			else
+			{
+				audioSource.UnPause();
+			}
 		}
 		else if (isMusicScheduled && !hasMusicStarted && audioSource.clip != null)
 		{
