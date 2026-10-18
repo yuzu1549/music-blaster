@@ -41,9 +41,10 @@ public class GamePauseController : MonoBehaviour
     [SerializeField] private OptionsKeyConfigController
         optionsKeyConfigController;
 
-    [Header("ポーズ画面を開くときの効果音")]
+    [Header("Esc でメニューを切り替えるときの効果音")]
     [SerializeField] private AudioClip pauseOpenClip;
     [SerializeField] private AudioMixerGroup pauseSeMixerGroup;
+    [SerializeField, Range(0f, 1f)] private float pauseOpenVolumeScale = 0.4f;
 
     private PauseState currentState = PauseState.Playing;
     private Coroutine resumeCountdownCoroutine;
@@ -83,6 +84,9 @@ public class GamePauseController : MonoBehaviour
         optionsOverlayController?.CloseOptions();
     }
 
+    /// <summary>
+    /// Esc 入力でポーズ状態を切り替え、切り替わった場合に効果音を鳴らす。
+    /// </summary>
     private void LateUpdate()
     {
         if (inputReader == null || !inputReader.WasPausePressed())
@@ -90,13 +94,10 @@ public class GamePauseController : MonoBehaviour
             return;
         }
 
+        PauseState stateBeforeInput = currentState;
         if (currentState == PauseState.Playing)
         {
             PauseGame();
-            if (currentState == PauseState.Paused && pauseOpenClip != null)
-            {
-                pauseOpenSource.PlayOneShot(pauseOpenClip);
-            }
         }
         else if (currentState == PauseState.Paused)
         {
@@ -110,6 +111,24 @@ public class GamePauseController : MonoBehaviour
         {
             CloseOptions();
         }
+
+        if (currentState != stateBeforeInput)
+        {
+            PlayPauseMenuSound();
+        }
+    }
+
+    /// <summary>
+    /// Esc によるメニューの切り替え時に、共通の効果音を再生する。
+    /// </summary>
+    private void PlayPauseMenuSound()
+    {
+        if (pauseOpenClip == null)
+        {
+            return;
+        }
+
+        pauseOpenSource.PlayOneShot(pauseOpenClip, pauseOpenVolumeScale);
     }
 
     private void OnApplicationFocus(bool hasFocus)
