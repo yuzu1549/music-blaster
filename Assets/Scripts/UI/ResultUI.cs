@@ -303,14 +303,28 @@ public class ResultUI : MonoBehaviour
     /// </summary>
     private void HighScoreUpdate()
     {
+        string songId = GameManager.Instance.musicTitle;
+        string difficulty = GameManager.Instance.difficulty;
         int currentScore = GameManager.Instance.score;
 
         // 最高スコアの保存
         HighScoreStorage.TryUpdate(
-            GameManager.Instance.musicTitle,
-            GameManager.Instance.difficulty,
+            songId,
+            difficulty,
             currentScore
         );
+        int highScore = HighScoreStorage.Get(songId, difficulty);
+
+        // ハイスコアをランキングに送る
+        if (songId == "ShiningStar" && difficulty == "Hard")
+        {
+            Ranking.SendScore.SendShinigStarScore(highScore);
+        }
+
+        if (songId == "SnowDrive0123" && difficulty == "Hard")
+        {
+            Ranking.SendScore.SendSnowDriveScore(highScore);
+        }
     }
 
     /// <summary>
