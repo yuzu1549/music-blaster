@@ -73,6 +73,10 @@ mono_crash.*
 *.unitypackage.meta
 *.app
 
+# Personal build profiles
+/Assets/Settings/Build Profiles/
+/Assets/Settings/Build Profiles.meta
+
 # Crashlytics generated file
 crashlytics-build.properties
 
